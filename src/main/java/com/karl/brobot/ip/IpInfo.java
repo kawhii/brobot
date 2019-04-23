@@ -24,4 +24,19 @@ public class IpInfo {
      * 创建时间
      */
     private long createTime;
+
+    /**
+     * 地址
+     */
+    private String address;
+
+    /**
+     * 运营商
+     */
+    private String isp;
+
+    /**
+     * 提供商
+     */
+    private String provider;
 }

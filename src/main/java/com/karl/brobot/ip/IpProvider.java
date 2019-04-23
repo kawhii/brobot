@@ -17,9 +17,21 @@ public interface IpProvider {
     String name();
 
     /**
+     * 访问地址
+     * @return
+     */
+    String url();
+
+    /**
+     * 提供者id
+     * @return
+     */
+    String id();
+
+    /**
      * 获取ip信息
      *
      * @return
      */
-    List<IpInfo> provide();
+    List<IpInfo> provide() throws Exception;
 }

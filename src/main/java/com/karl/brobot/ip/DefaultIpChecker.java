@@ -19,9 +19,7 @@ import java.net.Socket;
 public class DefaultIpChecker implements IpChecker {
     @Override
     public boolean check(IpInfo ip) {
-        if (isHostReachable(ip.getHost(), CONNECT_TIMEOUT_SECONDS * 1000)
-                && isHostConnectable(ip.getHost(),
-                ip.getPort())) {
+        if (isHostConnectable(ip.getHost(), ip.getPort(), CONNECT_TIMEOUT_SECONDS)) {
             log.debug("可用IP：[{}:{}]", ip.getHost(), ip.getPort());
             return true;
         }
@@ -33,12 +31,13 @@ public class DefaultIpChecker implements IpChecker {
      *
      * @param host
      * @param port
+     * @param timeout 超时秒
      * @return
      */
-    public static boolean isHostConnectable(String host, int port) {
+    public static boolean isHostConnectable(String host, int port, int timeout) {
         Socket socket = new Socket();
         try {
-            socket.connect(new InetSocketAddress(host, port));
+            socket.connect(new InetSocketAddress(host, port), timeout * 1000);
         } catch (IOException e) {
             return false;
         } finally {
@@ -48,14 +47,5 @@ public class DefaultIpChecker implements IpChecker {
             }
         }
         return true;
-    }
-
-    public static boolean isHostReachable(String host, Integer timeOut) {
-        try {
-            return InetAddress.getByName(host).isReachable(timeOut);
-        } catch (IOException e) {
-            log.error("", e);
-        }
-        return false;
     }
 }

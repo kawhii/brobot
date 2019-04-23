@@ -56,7 +56,13 @@ public class XicidailiIpProvider implements IpProvider {
             }
             final String host = tds.get(1).text().trim();
             final Integer port = Integer.parseInt(tds.get(2).text().trim());
-            final String address = tds.get(3).getElementsByTag("a").get(0).text().trim();
+            String address;
+            if(tds.get(3).getElementsByTag("a").size() > 0) {
+                address = tds.get(3).getElementsByTag("a").get(0).text().trim();
+            } else {
+                address = tds.get(3).text().trim();
+             }
+
             final String provider = tds.get(5).text().trim();
             final String time = tds.get(8).text().trim();
             if (!time.contains("天")) {

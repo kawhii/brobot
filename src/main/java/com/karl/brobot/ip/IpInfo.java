@@ -23,7 +23,7 @@ public class IpInfo {
     /**
      * 创建时间
      */
-    private long createTime;
+    private long createTime = System.currentTimeMillis();
 
     /**
      * 地址

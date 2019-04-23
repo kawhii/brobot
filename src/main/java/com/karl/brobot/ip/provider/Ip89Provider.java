@@ -69,8 +69,12 @@ public class Ip89Provider implements IpProvider {
         return ipInfos;
     }
 
+    /**
+     * 随机访问1~20页数据
+     * @return
+     */
     private int getPage() {
-        return (int)(1+Math.random()*(20-1+1));
+        return (int) (1 + Math.random() * (20 - 1 + 1));
     }
 
     /**

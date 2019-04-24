@@ -14,9 +14,18 @@ import java.util.List;
  */
 public class Context {
     @Getter
+    private String id;
+    @Getter
     private IpInfo ip;
     @Getter
     private long startTime;
+
+    public Context(String id, IpInfo ip, long startTime) {
+        this.id = id;
+        this.ip = ip;
+        this.startTime = startTime;
+    }
+
     /**
      * 处理链路
      */

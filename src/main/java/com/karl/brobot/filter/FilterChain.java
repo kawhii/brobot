@@ -17,10 +17,17 @@ public class FilterChain {
     @Getter
     public List<MysticFilter> filters;
 
+    public FilterChain(List<MysticFilter> filters) {
+        this.filters = filters;
+    }
+
     private Context context;
     private WebDriver webDriver;
 
     public void doFiler(Context context, WebDriver webDriver) throws FilterException {
+        if (filters == null) {
+            return;
+        }
         if (this.iterator == null) {
             this.iterator = this.filters.iterator();
         }
@@ -29,6 +36,8 @@ public class FilterChain {
             MysticFilter nextFilter = this.iterator.next();
             nextFilter.doFilter(context, webDriver, this);
         }
+        this.context = context;
+        this.webDriver = webDriver;
     }
 
     public void reset() {

@@ -13,7 +13,7 @@ public abstract class BaseMysticFilter implements MysticFilter {
     public void doFilter(Context context, WebDriver webDriver, FilterChain filterChain) throws FilterException {
         doFilterInternal(context, webDriver);
         filterChain.doFiler(context, webDriver);
-        afterFilter(webDriver);
+        afterFilter(context, webDriver);
     }
 
     /**
@@ -30,7 +30,7 @@ public abstract class BaseMysticFilter implements MysticFilter {
      *
      * @param webDriver
      */
-    protected void afterFilter(WebDriver webDriver) {
+    protected void afterFilter(Context context, WebDriver webDriver) {
 
     }
 }

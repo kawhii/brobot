@@ -7,4 +7,7 @@ package com.karl.brobot.filter;
  * @version 2019-04-24
  */
 public class FilterException extends Exception {
+    public FilterException(Throwable cause) {
+        super(cause);
+    }
 }

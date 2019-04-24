@@ -18,7 +18,7 @@ public class ClickNavCommand implements Command {
      * 可点击单词
      */
     private String words[] = new String[]{
-            "传记", "冒险", "剧情", "动作", "犯罪", "喜剧", "伦理", "爱情", "科幻", "奇幻"
+            "传记", "冒险", "剧情", "动作", "犯罪", "喜剧", "爱情", "科幻", "奇幻", "恐怖", "惊悚"
     };
 
     @Override

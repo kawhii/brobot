@@ -51,7 +51,7 @@ public class DispatchMysticFilter extends BaseMysticFilter {
             context.addLink(new FilterLink().setName(name).setDesc(desc));
             context.next();
             try {
-                log.debug("执行[{}]:[{}]-->{}", cmd.id(), cmd.name(), cmd.action());
+                log.debug("机器人{}号,执行[{}]:[{}]-->{}", context.getName(), cmd.id(), cmd.name(), cmd.action());
                 cmd.execute(webDriver);
             } catch (CommandException e) {
                 throw new FilterException(e);
@@ -63,6 +63,7 @@ public class DispatchMysticFilter extends BaseMysticFilter {
     protected void afterFilter(Context context, WebDriver webDriver) {
         StringBuffer buffer = new StringBuffer();
         //[ip:port]
+        buffer.append("机器人").append(context.getName()).append(",");
         buffer.append("代理：[").append(context.getIp().getHost()).append(":").append(context.getIp().getPort()).append(
                 "]:").append(context.getId());
         buffer.append("，总耗时：");

@@ -11,9 +11,12 @@ import org.openqa.selenium.WebDriver;
 public abstract class BaseMysticFilter implements MysticFilter {
     @Override
     public void doFilter(Context context, WebDriver webDriver, FilterChain filterChain) throws FilterException {
-        doFilterInternal(context, webDriver);
-        filterChain.doFiler(context, webDriver);
-        afterFilter(context, webDriver);
+        try {
+            doFilterInternal(context, webDriver);
+        } finally {
+            filterChain.doFiler(context, webDriver);
+            afterFilter(context, webDriver);
+        }
     }
 
     /**

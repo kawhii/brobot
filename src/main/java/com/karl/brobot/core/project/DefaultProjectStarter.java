@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 默认项目启动信息
@@ -28,6 +29,8 @@ public class DefaultProjectStarter implements ProjectStarter {
     private ApplicationContext applicationContext;
     @Autowired
     private CommandFinder commandFinder;
+    private Random random = new Random();
+    private int maxStap = 10;
 
     @Override
     public void start(IpInfo ipInfo, String name) {
@@ -37,6 +40,8 @@ public class DefaultProjectStarter implements ProjectStarter {
         startFilter.setCommandFinder(commandFinder);
         Context context = new Context(cmd.id(), ipInfo, System.currentTimeMillis());
         context.setName(name);
+        context.setMax(random.nextInt(maxStap) + 1);
+        log.debug("机器人{},即将执行{}次步数", name, context.getMax());
         WebDriver webDriver = buildWebDriver(ipInfo);
 
         EndMysticFilter ef = new EndMysticFilter();
@@ -61,8 +66,10 @@ public class DefaultProjectStarter implements ProjectStarter {
      */
     private WebDriver buildWebDriver(IpInfo ipInfo) {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments(String.format("--proxy-server=%s://%s:%s", ipInfo.getScheme(), ipInfo.getHost(), ipInfo.getPort()));
-
+        options.addArguments(String.format("--proxy-server=%s://%s:%s", ipInfo.getScheme(), ipInfo.getHost(),
+                ipInfo.getPort()));
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
         WebDriver webDriver = new ChromeDriver(options);
         return webDriver;
     }

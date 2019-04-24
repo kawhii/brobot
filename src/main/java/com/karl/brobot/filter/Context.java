@@ -1,4 +1,4 @@
-package com.karl.brobot.project;
+package com.karl.brobot.filter;
 
 import com.karl.brobot.ip.IpInfo;
 import lombok.Getter;

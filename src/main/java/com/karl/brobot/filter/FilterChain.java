@@ -1,4 +1,4 @@
-package com.karl.brobot.project;
+package com.karl.brobot.filter;
 
 import lombok.Getter;
 import org.openqa.selenium.WebDriver;

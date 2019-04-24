@@ -1,4 +1,4 @@
-package com.karl.brobot.project;
+package com.karl.brobot.filter;
 
 /**
  * 过滤链路信息

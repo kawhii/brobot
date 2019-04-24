@@ -1,5 +1,6 @@
 package com.karl.brobot.core.project;
 
+import com.karl.brobot.core.cmd.CommandFinder;
 import com.karl.brobot.core.cmd.common.OpenCommand;
 import com.karl.brobot.filter.*;
 import com.karl.brobot.ip.IpInfo;
@@ -25,12 +26,15 @@ import java.util.List;
 public class DefaultProjectStarter implements ProjectStarter {
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private CommandFinder commandFinder;
 
     @Override
     public void start(IpInfo ipInfo, String name) {
         OpenCommand cmd = new OpenCommand("tmvtv", "http://www.tmvtv.com/", "淘电影");
 
-        DispatchMysticFilter filter = new DispatchMysticFilter(cmd);
+        DispatchMysticFilter startFilter = new DispatchMysticFilter(cmd);
+        startFilter.setCommandFinder(commandFinder);
         Context context = new Context(cmd.id(), ipInfo, System.currentTimeMillis());
         context.setName(name);
         WebDriver webDriver = buildWebDriver(ipInfo);
@@ -39,10 +43,11 @@ public class DefaultProjectStarter implements ProjectStarter {
         ef.setApplicationContext(applicationContext);
         List<MysticFilter> filters = new ArrayList<>();
         filters.add(ef);
+        filters.add(startFilter);
 
         FilterChain filterChain = new FilterChain(filters);
         try {
-            filter.doFilter(context, webDriver, filterChain);
+            filterChain.doFiler(context, webDriver);
         } catch (FilterException e) {
             log.warn("机器人{} 发生错误了: {}", name, e.getMessage());
         }

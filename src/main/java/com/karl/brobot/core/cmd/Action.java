@@ -26,6 +26,10 @@ public enum Action {
      */
     OPEN("打开"),
     /**
+     * 休眠
+     */
+    SLEEP("休眠"),
+    /**
      * 滑动
      */
     SCROLL("滑动"),

@@ -39,4 +39,8 @@ public class IpInfo {
      * 提供商
      */
     private String provider;
+    /**
+     * 支持策略
+     */
+    private String scheme = "http";
 }

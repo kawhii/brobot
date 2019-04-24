@@ -20,12 +20,10 @@ public class DispatchMysticFilterTest {
 
     @Test
     public void doFilter() throws FilterException {
-        List<Command> cmds = new ArrayList<>();
-        cmds.add(new OpenCommand("1", "https://baidu.com", "打开百度"));
-        DispatchMysticFilter filter = new DispatchMysticFilter(cmds);
+        Command cmd = new OpenCommand("1", "https://baidu.com", "打开百度");
+        DispatchMysticFilter filter = new DispatchMysticFilter(cmd);
         Context context = new Context("baidu", new IpInfo(), System.currentTimeMillis());
         WebDriver webDriver = new ChromeDriver();
-
 
         List<MysticFilter> filters = new ArrayList<>();
         filters.add(new EndMysticFilter());

@@ -1,6 +1,7 @@
 package com.karl.brobot.core.cmd.common;
 
 import com.karl.brobot.core.cmd.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**

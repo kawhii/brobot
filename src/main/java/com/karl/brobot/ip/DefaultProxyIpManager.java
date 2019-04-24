@@ -5,7 +5,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 实现队列进行管理ip，允许超过进行放入
@@ -26,7 +28,7 @@ public class DefaultProxyIpManager implements ProxyIpManager {
     @Setter
     private int maxSize = MAX_SIZE;
 
-    private Queue<IpInfo> queue = new LinkedBlockingQueue<>();
+    private BlockingQueue<IpInfo> queue = new LinkedBlockingQueue<>();
 
     @Override
     public boolean enough() {
@@ -35,7 +37,11 @@ public class DefaultProxyIpManager implements ProxyIpManager {
 
     @Override
     public IpInfo get() {
-        return queue.poll();
+        try {
+            return queue.poll(2, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

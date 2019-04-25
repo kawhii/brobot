@@ -38,7 +38,7 @@ public class OpenCommand implements Command {
 
     @Override
     public CommandMatcher getMatcher() {
-        return (webInfo, platformCode, last) -> true;
+        return (webInfo, platformCode, last, wd) -> true;
     }
 
     @Override

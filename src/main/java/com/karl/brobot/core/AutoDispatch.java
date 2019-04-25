@@ -27,7 +27,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 @Slf4j
 public class AutoDispatch {
-    @Value("${max.machine:5}")
+    /**
+     * 机器人最大数
+     */
+    @Value("${machine.max_count:5}")
     private int maxMachine;
     @Autowired
     private ProxyIpManager proxyIpManager;

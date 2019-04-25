@@ -4,11 +4,13 @@ import com.karl.brobot.core.cmd.CommandFinder;
 import com.karl.brobot.core.cmd.common.OpenCommand;
 import com.karl.brobot.filter.*;
 import com.karl.brobot.ip.IpInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +33,16 @@ public class DefaultProjectStarter implements ProjectStarter {
     @Autowired
     private CommandFinder commandFinder;
     private Random random = new Random();
-    private int maxStap = 10;
+    /**
+     * 是否浏览器隐藏执行
+     */
+    @Value("${machine.headless:true}")
+    @Getter
+    private boolean headless = true;
+    /**
+     * 最大执行步数
+     */
+    private int maxStep = 10;
 
     @Override
     public void start(IpInfo ipInfo, String name) {
@@ -41,8 +52,8 @@ public class DefaultProjectStarter implements ProjectStarter {
         startFilter.setCommandFinder(commandFinder);
         Context context = new Context(cmd.id(), ipInfo, System.currentTimeMillis());
         context.setName(name);
-        context.setMax(random.nextInt(maxStap) + 1);
-        log.debug("机器人{},即将执行{}次步数", name, context.getMax());
+        context.setMax(random.nextInt(maxStep) + 1);
+        log.debug("机器人{}号,即将执行{}次步数", name, context.getMax());
         WebDriver webDriver = buildWebDriver(ipInfo);
 
         EndMysticFilter ef = new EndMysticFilter();
@@ -69,13 +80,15 @@ public class DefaultProjectStarter implements ProjectStarter {
         ChromeOptions options = new ChromeOptions();
         options.addArguments(String.format("--proxy-server=%s://%s:%s", ipInfo.getScheme(), ipInfo.getHost(),
                 ipInfo.getPort()));
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
+        if (headless) {
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+        }
         WebDriver webDriver = new ChromeDriver(options);
         //页面加载时间
         webDriver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
         //存留时间
-        webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.MINUTES);
+        webDriver.manage().timeouts().implicitlyWait(2, TimeUnit.MINUTES);
         return webDriver;
     }
 }

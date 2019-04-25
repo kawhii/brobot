@@ -1,7 +1,6 @@
 package com.karl.brobot.core.cmd;
 
-import com.karl.brobot.core.cmd.tmvtv.BackCommand;
-import com.karl.brobot.core.cmd.tmvtv.ClickNavCommand;
+import com.karl.brobot.core.cmd.tmvtv.*;
 import com.karl.brobot.filter.Context;
 import org.openqa.selenium.WebDriver;
 
@@ -29,6 +28,10 @@ public class DefaultCommandFinder implements CommandFinder {
     {
         commands.add(new BackCommand());
         commands.add(new ClickNavCommand());
+        commands.add(new ForwardCommand());
+        commands.add(new MovieClickCommand());
+        commands.add(new RefreshCommand());
+        commands.add(new CloseTabCommand());
     }
 
     @Override
@@ -40,7 +43,7 @@ public class DefaultCommandFinder implements CommandFinder {
             WebInfo webInfo = new WebInfo();
             webInfo.setCurrentUrl(webDriver.getCurrentUrl());
             webInfo.setTitle(webDriver.getTitle());
-            if (command.getMatcher().matcher(webInfo, context.getId(), lastCmd)) {
+            if (command.getMatcher().matcher(webInfo, context.getId(), lastCmd, webDriver)) {
                 return command;
             }
         } while (++findCount <= maxCount);

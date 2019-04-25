@@ -26,6 +26,10 @@ public enum Action {
      */
     OPEN("打开"),
     /**
+     * 打开标签
+     */
+    NEW_TAB("打开标签"),
+    /**
      * 休眠
      */
     SLEEP("休眠"),
@@ -40,7 +44,7 @@ public enum Action {
     /**
      * 前进
      */
-    GO("前进"),
+    FORWARD("前进"),
     /**
      * 刷新
      */

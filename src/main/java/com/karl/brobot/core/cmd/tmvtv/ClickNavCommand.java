@@ -25,7 +25,7 @@ public class ClickNavCommand implements Command {
 
     @Override
     public Action[] action() {
-        return new Action[]{Action.CLICK};
+        return new Action[]{Action.CLICK, Action.FORWARD};
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ClickNavCommand implements Command {
 
     @Override
     public CommandMatcher getMatcher() {
-        return (webInfo, platformCode, last) -> "http://www.tmvtv.com/".equals(webInfo.getCurrentUrl()) || ("http" +
+        return (webInfo, platformCode, last, wd) -> "http://www.tmvtv.com/".equals(webInfo.getCurrentUrl()) || ("http" +
                 "://www.tmvtv.com").equals(webInfo.getCurrentUrl()) || webInfo.getCurrentUrl().contains("http://www" +
                 ".tmvtv.com/movie_bt_tags");
     }

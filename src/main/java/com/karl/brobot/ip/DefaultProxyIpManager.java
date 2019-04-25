@@ -3,6 +3,7 @@ package com.karl.brobot.ip;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
@@ -28,6 +29,15 @@ public class DefaultProxyIpManager implements ProxyIpManager {
     @Setter
     private int maxSize = MAX_SIZE;
 
+    /**
+     * ip检查器
+     */
+    private IpChecker ipChecker;
+
+    public DefaultProxyIpManager(IpChecker ipChecker) {
+        this.ipChecker = ipChecker;
+    }
+
     private BlockingQueue<IpInfo> queue = new LinkedBlockingQueue<>();
 
     @Override
@@ -38,10 +48,18 @@ public class DefaultProxyIpManager implements ProxyIpManager {
     @Override
     public IpInfo get() {
         try {
-            return queue.poll(2, TimeUnit.MINUTES);
+            IpInfo ip = queue.poll(2, TimeUnit.MINUTES);
+            if (ip == null) {
+                Thread.sleep(200);
+                return get();
+            }
+            if (ipChecker.check(ip)) {
+                return ip;
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     @Override
@@ -52,6 +70,7 @@ public class DefaultProxyIpManager implements ProxyIpManager {
     @Override
     public boolean put(IpInfo ip) {
         queue.add(ip);
+        log.debug("放入IP：[{}:{}]", ip.getHost(), ip.getPort());
         return enough();
     }
 }

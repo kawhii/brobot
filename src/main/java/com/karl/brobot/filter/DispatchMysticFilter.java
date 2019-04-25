@@ -53,7 +53,8 @@ public class DispatchMysticFilter extends BaseMysticFilter {
             context.addLink(new FilterLink().setName(name).setDesc(desc));
             context.next();
             try {
-                log.debug("机器人{}号,执行[{}]:[{}]-->{}", context.getName(), cmd.id(), cmd.name(), cmd.action());
+                log.debug("机器人{}号,步骤[{}-->{}],执行[{}]:[{}]-->{}", context.getName(), context.getStep(),
+                        context.getMax(), cmd.id(), cmd.name(), cmd.action());
                 cmd.execute(webDriver);
 
                 //可能网络原因导致失败，不进行往下执行了

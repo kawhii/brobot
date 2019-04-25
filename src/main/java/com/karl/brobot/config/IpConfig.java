@@ -21,8 +21,8 @@ public class IpConfig {
      * @return
      */
     @Bean
-    protected ProxyIpManager proxyIpManager() {
-        return new DefaultProxyIpManager();
+    protected ProxyIpManager proxyIpManager(IpChecker ipChecker) {
+        return new DefaultProxyIpManager(ipChecker);
     }
 
     /**

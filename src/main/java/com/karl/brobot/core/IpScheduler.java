@@ -36,10 +36,9 @@ public class IpScheduler {
     private boolean searchIp;
 
     /**
-     * 一分钟查询一次ip
+     * 40秒查询一次ip
      */
-    @Scheduled(cron = "0 */1 * * * ?")
-    @Async
+    @Scheduled(cron = "0/40 * * * * ? ")
     public void searchIp() {
         if(!searchIp) {
             return;

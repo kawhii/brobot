@@ -94,9 +94,9 @@ public class DefaultProjectStarter implements ProjectStarter {
         }
         WebDriver webDriver = new ChromeDriver(options);
         //页面加载时间
-        webDriver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
+        webDriver.manage().timeouts().pageLoadTimeout(1, TimeUnit.MINUTES);
         //存留时间
-        webDriver.manage().timeouts().implicitlyWait(2, TimeUnit.MINUTES);
+        webDriver.manage().timeouts().implicitlyWait(1, TimeUnit.MINUTES);
         return webDriver;
     }
 }

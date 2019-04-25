@@ -20,7 +20,6 @@ public class DefaultIpChecker implements IpChecker {
     @Override
     public boolean check(IpInfo ip) {
         if (isHostConnectable(ip.getHost(), ip.getPort(), CONNECT_TIMEOUT_SECONDS)) {
-            log.debug("可用IP：[{}:{}]", ip.getHost(), ip.getPort());
             return true;
         }
         return false;

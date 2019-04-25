@@ -23,15 +23,17 @@ public class EndMysticFilter implements MysticFilter {
     public void doFilter(Context context, WebDriver webDriver, FilterChain filterChain) throws FilterException {
         try {
             filterChain.doFiler(context, webDriver);
+        } catch (Throwable e) {
+            log.warn("执行异常(可忽略)，将关闭浏览器，错误信息: [{}]", e.getMessage());
         } finally {
-            webDriver.close();
+            webDriver.quit();
             //如果步数超过3，再次使用该ip
-            if(proxyIpManager != null && context.getStep() > 3) {
+            if (proxyIpManager != null && context.getStep() >= 3) {
                 log.info("重用IP [{}:{}]", context.getIp().getHost(), context.getIp().getPort());
                 proxyIpManager.put(context.getIp());
             }
             //发布完成调度事件
-            if(applicationContext != null) {
+            if (applicationContext != null) {
                 applicationContext.publishEvent(new FinishDispatchEvent(context, this));
             }
         }

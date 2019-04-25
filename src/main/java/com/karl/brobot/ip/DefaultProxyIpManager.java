@@ -3,9 +3,7 @@ package com.karl.brobot.ip;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +19,7 @@ public class DefaultProxyIpManager implements ProxyIpManager {
     /**
      * 最大容量
      */
-    public static final int MAX_SIZE = 200;
+    public static final int MAX_SIZE = 350;
     /**
      * 最大值
      */

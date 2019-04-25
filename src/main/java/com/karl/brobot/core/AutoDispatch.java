@@ -58,7 +58,6 @@ public class AutoDispatch {
      * @param event
      */
     @EventListener
-    @Async
     public void start(ApplicationStartedEvent event) {
         if(!robotEnable) {
             return;
@@ -75,7 +74,7 @@ public class AutoDispatch {
      * @param event
      */
     @EventListener
-    @Async
+    @Async(value = "taskScheduler")
     public void start(FinishDispatchEvent event) {
         count.decrementAndGet();
         machineQueue.add(event.getContext().getName());

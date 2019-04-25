@@ -4,11 +4,16 @@ import com.karl.brobot.core.cmd.CommandFinder;
 import com.karl.brobot.core.cmd.common.OpenCommand;
 import com.karl.brobot.filter.*;
 import com.karl.brobot.ip.IpInfo;
+import com.karl.brobot.ip.ProxyIpManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.mobile.NetworkConnection;
+import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -32,11 +37,13 @@ public class DefaultProjectStarter implements ProjectStarter {
     private ApplicationContext applicationContext;
     @Autowired
     private CommandFinder commandFinder;
+    @Autowired
+    private ProxyIpManager ipManager;
     private Random random = new Random();
     /**
      * 是否浏览器隐藏执行
      */
-    @Value("${machine.headless:true}")
+    @Value("${robot.headless:true}")
     @Getter
     private boolean headless = true;
     /**
@@ -57,6 +64,7 @@ public class DefaultProjectStarter implements ProjectStarter {
         WebDriver webDriver = buildWebDriver(ipInfo);
 
         EndMysticFilter ef = new EndMysticFilter();
+        ef.setProxyIpManager(ipManager);
         ef.setApplicationContext(applicationContext);
         List<MysticFilter> filters = new ArrayList<>();
         filters.add(ef);

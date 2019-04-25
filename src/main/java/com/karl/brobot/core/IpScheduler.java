@@ -3,6 +3,7 @@ package com.karl.brobot.core;
 import com.karl.brobot.ip.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -31,6 +32,8 @@ public class IpScheduler {
     private ProxyIpManager proxyIpManager;
     @Autowired
     private ApplicationContext applicationContext;
+    @Value("${ip.search.enable:true}")
+    private boolean searchIp;
 
     /**
      * 一分钟查询一次ip
@@ -38,6 +41,9 @@ public class IpScheduler {
     @Scheduled(cron = "0 */1 * * * ?")
     @Async
     public void searchIp() {
+        if(!searchIp) {
+            return;
+        }
         if(proxyIpManager.enough()) {
             log.info("代理IP量已足够，本次暂停搜寻");
             return;
@@ -56,7 +62,13 @@ public class IpScheduler {
         IpProvider provider = listener.getProvider();
         log.info("[{} ---> {}]开始寻找代理ip", provider.name(), provider.url());
         try {
-            final List<IpInfo> list = provider.provide();
+            final List<IpInfo> list;
+            try {
+                list = provider.provide();
+            } catch (Exception e){
+                log.error("[{}:{}]获取代理ip异常", provider.name(), provider.id());
+                return ;
+            }
             if(list == null) {
                 return;
             }

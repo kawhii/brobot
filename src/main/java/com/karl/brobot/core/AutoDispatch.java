@@ -30,7 +30,7 @@ public class AutoDispatch {
     /**
      * 机器人最大数
      */
-    @Value("${machine.max_count:5}")
+    @Value("${robot.max_count:5}")
     private int maxMachine;
     @Autowired
     private ProxyIpManager proxyIpManager;
@@ -38,6 +38,11 @@ public class AutoDispatch {
     private ThreadPoolTaskScheduler taskScheduler;
     @Autowired
     private ProjectStarter projectStarter;
+    /**
+     * 启动机器人
+     */
+    @Value("${robot.enable:true}")
+    private boolean robotEnable = true;
     /**
      * 机器人名称
      */
@@ -55,6 +60,9 @@ public class AutoDispatch {
     @EventListener
     @Async
     public void start(ApplicationStartedEvent event) {
+        if(!robotEnable) {
+            return;
+        }
         log.info("启动完成，机器人已经开始出发。");
         while (!isMax()) {
             taskScheduler.execute(this::run);
@@ -78,24 +86,31 @@ public class AutoDispatch {
      * 开始启动任务
      */
     private void run() {
-        if (isMax()) {
-            return;
-        }
-        //当前机器人数
-        final int num = count.incrementAndGet();
-        String machineNo = machineQueue.poll();
-        log.info("机器人{}号出发。", machineNo);
-        final IpInfo ipInfo = proxyIpManager.get();
-
-        if (ipInfo == null) {
-            log.warn("找到ip为空，继续执行");
-            run();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
+        try {
+            if (isMax()) {
+                return;
             }
+            //当前机器人数
+            count.incrementAndGet();
+            String machineNo = machineQueue.poll();
+            log.info("机器人{}号出发。", machineNo);
+            final IpInfo ipInfo = proxyIpManager.get();
+
+            if (ipInfo == null) {
+                log.warn("找到ip为空，继续执行");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                }
+                count.decrementAndGet();
+                machineQueue.add(machineNo);
+                run();
+                return;
+            }
+            projectStarter.start(ipInfo, machineNo);
+        } catch (Exception e) {
+            log.debug("", e);
         }
-        projectStarter.start(ipInfo, machineNo);
     }
 
     /**

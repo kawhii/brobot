@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -53,6 +55,12 @@ public class DispatchMysticFilter extends BaseMysticFilter {
             try {
                 log.debug("机器人{}号,执行[{}]:[{}]-->{}", context.getName(), cmd.id(), cmd.name(), cmd.action());
                 cmd.execute(webDriver);
+
+                //可能网络原因导致失败，不进行往下执行了
+                if (StringUtils.isEmpty(webDriver.getPageSource()) || webDriver.getPageSource().length() < 500) {
+                    log.debug("机器人{}号网络连接异常，停止运行", context.getName());
+                    return;
+                }
             } catch (CommandException e) {
                 throw new FilterException(e);
             }

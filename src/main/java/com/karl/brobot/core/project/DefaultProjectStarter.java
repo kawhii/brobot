@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 默认项目启动信息
@@ -71,6 +72,10 @@ public class DefaultProjectStarter implements ProjectStarter {
         options.addArguments("--headless");
         options.addArguments("--disable-gpu");
         WebDriver webDriver = new ChromeDriver(options);
+        //页面加载时间
+        webDriver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
+        //存留时间
+        webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.MINUTES);
         return webDriver;
     }
 }

@@ -3,6 +3,8 @@ package com.karl.brobot.core.cmd.tmvtv;
 import com.karl.brobot.core.cmd.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
 
@@ -30,6 +32,14 @@ public class ClickNavCommand implements Command {
     public void execute(WebDriver webDriver) throws CommandException {
         int idx = random.nextInt(words.length);
         String word = words[idx];
+
+        //随机休眠时间
+        try {
+            Thread.sleep((random.nextInt(10) + 1) * 1000);
+        } catch (InterruptedException e) {
+        }
+        WebDriverWait wait = new WebDriverWait(webDriver, 20);
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.linkText(word)));
         webDriver.findElement(By.linkText(word)).click();
     }
 
